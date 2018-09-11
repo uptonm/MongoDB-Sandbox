@@ -17,4 +17,12 @@ describe('Reading Users', () => {
             done()
         })
     })
+
+    it('Finds Joe Rogan by _id', (done) => {
+        User.findOne({ _id: joe._id})
+        .then((user) => {
+            assert(user.name === 'Joe Rogan')
+            done()
+        })
+    })
 })
