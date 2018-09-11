@@ -9,6 +9,7 @@ before((done) => {
     .on('error', (error) => {
         console.warn('Error', error)
     })
+    mongoose.set('useFindAndModify', false);
 })
 
 beforeEach((done) => {
