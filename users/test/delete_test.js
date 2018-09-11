@@ -10,40 +10,29 @@ describe('Deleting a user', () => {
         .then(() => done())
     })
 
-    it('Model instance remove', (done) => {
-        // Already have user i.e. the joe variable above
-        joe.remove()
-            .then(() => User.findOne({name: 'Joe Rogan'}))
+    function assertName(operation, done) {
+        operation
+        .then(() => User.findOne({name: 'Joe Rogan'}))
             .then((user) => {
                 assert(user === null)
                 done()
             })
+    }
+
+    it('Model instance remove', (done) => {
+        // Already have user i.e. the joe variable above
+        assertName(joe.remove(), done)
     })
 
     it('Class method remove', (done) => {
-        User.deleteOne({name: 'Joe Rogan'}) // Collection.delete is depreciated, use deleteOne or deleteMany => We know that there will only be one entry per test so either works
-        .then(() => User.findOne({name: 'Joe Rogan'}))
-            .then((user) => {
-                assert(user === null)
-                done()
-            })
+        assertName(User.deleteOne({name: 'Joe Rogan'}), done) // Collection.delete is depreciated, use deleteOne or deleteMany => We know that there will only be one entry per test so either works
     })
 
     it('Class method findAndRemove', (done) => {
-        User.findOneAndDelete({name: 'Joe Rogan'})
-        .then(() => User.findOne({name: 'Joe Rogan'}))
-        .then((user) => {
-            assert(user === null)
-            done()
-        })
+        assertName(User.findOneAndDelete({name: 'Joe Rogan'}), done)
     })
 
     it('Class method findByIdAndRemove', (done) => {
-        User.findByIdAndDelete(joe._id)
-        .then(() => User.findOne({name: 'Joe Rogan'}))
-        .then((user) => {
-            assert(user === null)
-            done()
-        })
+        assertName(User.findByIdAndDelete(joe._id), done)
     })
 })
