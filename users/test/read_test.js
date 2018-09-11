@@ -10,7 +10,11 @@ describe('Reading Users', () => {
         .then(() => done())
     })
 
-    it('Finds all Joe Rogans', () => {
-        joe
+    it('Finds all Joe Rogans', (done) => {
+        User.find({name: 'Joe Rogan'})
+        .then((users) => {
+            assert(users[0]._id.toString() === joe._id.toString())
+            done()
+        })
     })
 })
