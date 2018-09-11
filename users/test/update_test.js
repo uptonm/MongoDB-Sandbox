@@ -5,7 +5,7 @@ describe('Updating records', () => {
     let joe
 
     beforeEach((done) => {
-        joe = new User({name: 'Joe Rogan'})
+        joe = new User({name: 'Joe Rogan', postCount: 0})
         joe.save()
         .then(() => done())
     })
@@ -40,5 +40,14 @@ describe('Updating records', () => {
 
     it('A model class can find a record by id and update', (done) => {
         assertName(User.findByIdAndUpdate(joe._id, {name: 'Modified'}), done)
+    })
+
+    it('Increment post count', (done) => {
+        User.updateOne({name: 'Joe Rogan'}, {$inc: {postCount: 1}}) // update:  { <modifier> : { <variable> : <modify by quantity> } }
+        .then(() => User.findOne({name: 'Joe Rogan'}))
+        .then((user) => {
+            assert(user.postCount === 1)
+            done()
+        })
     })
 })
