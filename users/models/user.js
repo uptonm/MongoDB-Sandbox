@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const { Schema } = mongoose
+const postSchema = require('./post')
 
 const userSchema = new Schema({
     name: {
@@ -10,7 +11,8 @@ const userSchema = new Schema({
         },
         required: [true, 'Name is required']
     },
-    postCount: Number
+    postCount: Number,
+    posts: [postSchema]
 })
 
 const User = mongoose.model('users', userSchema)
