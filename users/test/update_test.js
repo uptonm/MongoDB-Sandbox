@@ -42,7 +42,8 @@ describe('Updating records', () => {
         assertName(User.findByIdAndUpdate(joe._id, {name: 'Modified'}), done)
     })
 
-    it('Increment post count', (done) => {
+    // This test is no longer valid because the postCount is now a Virtual type
+    xit('Increment post count', (done) => {
         User.updateOne({name: 'Joe Rogan'}, {$inc: {postCount: 1}}) // update:  { <modifier> : { <variable> : <modify by quantity> } }
         .then(() => User.findOne({name: 'Joe Rogan'}))
         .then((user) => {
