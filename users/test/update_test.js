@@ -5,7 +5,7 @@ describe('Updating records', () => {
     let joe
 
     beforeEach((done) => {
-        joe = new User({name: 'Joe Rogan', postCount: 0})
+        joe = new User({name: 'Joe Rogan', likes: 0})
         joe.save()
         .then(() => done())
     })
@@ -43,11 +43,11 @@ describe('Updating records', () => {
     })
 
     // This test is no longer valid because the postCount is now a Virtual type
-    xit('Increment post count', (done) => {
-        User.updateOne({name: 'Joe Rogan'}, {$inc: {postCount: 1}}) // update:  { <modifier> : { <variable> : <modify by quantity> } }
+    it('Increment post count', (done) => {
+        User.updateOne({name: 'Joe Rogan'}, {$inc: {likes: 10}}) // update:  { <modifier> : { <variable> : <modify by quantity> } }
         .then(() => User.findOne({name: 'Joe Rogan'}))
         .then((user) => {
-            assert(user.postCount === 1)
+            assert(user.likes === 10)
             done()
         })
     })
