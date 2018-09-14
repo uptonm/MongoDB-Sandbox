@@ -19,10 +19,18 @@ const userSchema = new Schema({
     }]
 })
 
+// Virtual Field, does not persist to database, performs function to calculate locally
 userSchema.virtual('postCount').get(function() {
     return this.posts.length
 })
 
+// middleware: run on remove call
+userSchema.pre('remove', function(next) {
+    const BlogPost = mongoose.model('blogposts')
+    // Go through BlogPost collection, if the _id is in Joe's list of blogPosts, delete it
+    BlogPost.deleteOne({ _id: { $in: this.blogPosts }})
+    .then(() => next())
+})  
 
 const User = mongoose.model('users', userSchema)
 

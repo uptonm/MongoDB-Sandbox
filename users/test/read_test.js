@@ -2,11 +2,14 @@ const assert = require('assert')
 const User = require('../models/user')
 
 describe('Reading Users', () => {
-    let joe
+    let joe, mark, alex, zach
 
     beforeEach((done) => {
+        alex = new User({ name: 'Alex' })
         joe = new User({ name: 'Joe Rogan' })
-        joe.save()
+        mark = new User({ name: 'Mark' })
+        zach = new User({ name: 'Zach' })
+        Promise.all([alex.save(), mark.save(), zach.save(), joe.save()])
         .then(() => done())
     })
 
@@ -22,6 +25,20 @@ describe('Reading Users', () => {
         User.findOne({ _id: joe._id})
         .then((user) => {
             assert(user.name === 'Joe Rogan')
+            done()
+        })
+    })
+
+    it('Can skip and limit the result set (pagination)', (done) => {
+        // -Alex-, [Joe, Mark], -Zach-
+        User.find({})
+        .sort({ name: 1}) // if negative sorts in descending order
+        .skip(1)
+        .limit(2)
+        .then((users) => {
+            assert(users.length === 2)
+            assert(users[0].name === 'Joe Rogan')
+            assert(users[1].name === 'Mark')
             done()
         })
     })
